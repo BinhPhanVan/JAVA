@@ -1,0 +1,173 @@
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JTextArea;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class TCP_serverExpression extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField port;
+	private JTextField textField;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					TCP_serverExpression frame = new TCP_serverExpression();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	public static double value(final String str) {
+	    return new Object() {
+	        int pos = -1, ch;
+
+	        void nextChar() {
+	            ch = (++pos < str.length()) ? str.charAt(pos) : -1;
+	        }
+
+	        boolean eat(int charToEat) {
+	            while (ch == ' ') nextChar();
+	            if (ch == charToEat) {
+	                nextChar();
+	                return true;
+	            }
+	            return false;
+	        }
+
+	        double parse() {
+	            nextChar();
+	            double x = parseExpression();
+	            if (pos < str.length()) throw new RuntimeException("Unexpected: " + (char)ch);
+	            return x;
+	        }
+
+	        // Grammar:
+	        // expression = term | expression `+` term | expression `-` term
+	        // term = factor | term `*` factor | term `/` factor
+	        // factor = `+` factor | `-` factor | `(` expression `)`
+	        //        | number | functionName factor | factor `^` factor
+
+	        double parseExpression() {
+	            double x = parseTerm();
+	            for (;;) {
+	                if      (eat('+')) x += parseTerm(); // addition
+	                else if (eat('-')) x -= parseTerm(); // subtraction
+	                else return x;
+	            }
+	        }
+
+	        double parseTerm() {
+	            double x = parseFactor();
+	            for (;;) {
+	                if      (eat('*')) x *= parseFactor(); // multiplication
+	                else if (eat('/')) x /= parseFactor(); // division
+	                else return x;
+	            }
+	        }
+
+	        double parseFactor() {
+	            if (eat('+')) return parseFactor(); // unary plus
+	            if (eat('-')) return -parseFactor(); // unary minus
+
+	            double x;
+	            int startPos = this.pos;
+	            if (eat('(')) { // parentheses
+	                x = parseExpression();
+	                eat(')');
+	            } else if ((ch >= '0' && ch <= '9') || ch == '.') { // numbers
+	                while ((ch >= '0' && ch <= '9') || ch == '.') nextChar();
+	                x = Double.parseDouble(str.substring(startPos, this.pos));
+	            } else if (ch >= 'a' && ch <= 'z') { // functions
+	                while (ch >= 'a' && ch <= 'z') nextChar();
+	                String func = str.substring(startPos, this.pos);
+	                x = parseFactor();
+	                if (func.equals("sqrt")) x = Math.sqrt(x);
+	                else if (func.equals("sin")) x = Math.sin(Math.toRadians(x));
+	                else if (func.equals("cos")) x = Math.cos(Math.toRadians(x));
+	                else if (func.equals("tan")) x = Math.tan(Math.toRadians(x));
+	                else throw new RuntimeException("Unknown function: " + func);
+	            } else {
+	                throw new RuntimeException("Unexpected: " + (char)ch);
+	            }
+
+	            if (eat('^')) x = Math.pow(x, parseFactor()); // exponentiation
+
+	            return x;
+	        }
+	    }.parse();
+	}
+	/**
+	 * Create the frame.
+	 */
+	public TCP_serverExpression() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 465, 402);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Nh\u1EADp c\u1ED5ng server");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel.setBounds(10, 40, 124, 27);
+		contentPane.add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("CLIENT");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblNewLabel_1.setBounds(191, 7, 86, 27);
+		contentPane.add(lblNewLabel_1);
+		
+		port = new JTextField();
+		port.setBounds(144, 45, 95, 20);
+		contentPane.add(port);
+		port.setColumns(10);
+		
+		JButton btn_connect = new JButton("CONNECT");
+		btn_connect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btn_connect.setBounds(249, 44, 89, 23);
+		contentPane.add(btn_connect);
+		
+		JButton btn_close = new JButton("CLOSE");
+		btn_close.setBounds(348, 44, 89, 23);
+		contentPane.add(btn_close);
+		
+		JTextArea textArea = new JTextArea();
+		textArea.setBounds(10, 207, 427, 145);
+		contentPane.add(textArea);
+		
+		JButton btn_tinh = new JButton("T\u00CDNH");
+		btn_tinh.setBounds(188, 169, 89, 23);
+		contentPane.add(btn_tinh);
+		
+		textField = new JTextField();
+		textField.setBounds(10, 124, 427, 34);
+		contentPane.add(textField);
+		textField.setColumns(10);
+		
+		JLabel lblNewLabel_2 = new JLabel("Bi\u1EC3u th\u1EE9c");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel_2.setBounds(10, 88, 107, 20);
+		contentPane.add(lblNewLabel_2);
+	}
+}

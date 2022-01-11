@@ -1,0 +1,21 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Welcome</title>
+</head>
+<body>
+	<%
+		String username = request.getParameter("username");
+		String address = (String)request.getAttribute("DiaChi");
+		String school = (String)session.getAttribute("value");
+	%>
+	<h2>Personal Information</h3>
+	<br>
+	Welcome <%=username%> ! <br>
+	You are living at <%=address%> <br>
+	School is <%=school%>
+</body>
+</html>

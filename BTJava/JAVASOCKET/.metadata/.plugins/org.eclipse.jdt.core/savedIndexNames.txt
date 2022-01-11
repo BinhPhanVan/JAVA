@@ -1,0 +1,8 @@
+INDEX VERSION 1.131+C:\Users\Admin\OneDrive\Desktop\BTJava\JAVASOCKET\.metadata\.plugins\org.eclipse.jdt.core
+3195848846.index
+3380344856.index
+662018356.index
+2787652770.index
+3460880079.index
+1059153176.index
+1857777630.index

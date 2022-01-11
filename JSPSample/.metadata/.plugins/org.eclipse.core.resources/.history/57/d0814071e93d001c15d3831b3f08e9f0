@@ -1,0 +1,49 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<style type="text/css">
+	.btn_r{
+		text-align: center;
+		justify-content: center;
+	}
+	.btn_l{
+		text-align: center;
+		justify-content: center;
+	}
+	._input{
+	display: block;
+	width: 150px;
+	}
+	.title
+	{
+		display: block;
+		
+	}
+</style>
+</head>
+<body>
+<%
+	String school = "Đại học Bách Khoa - Đại Học Đà Nẵng";
+	session.setAttribute("value", school);
+%>
+	<h2 class="title">Đăng nhập</h2>
+	<form action="checkLogin.jsp" method ="post">
+		Username: 
+		<br>
+		<input class = "_input" type="text" name="username">
+		<br>
+		Password: 
+		<br>
+		<input class = "_input" type="password" name="password">
+		<br>
+		<input class = "btn0" type="submit" value="LOGIN">
+		<input class = "btn" type="reset" value="Reset">
+	</form>
+
+
+</body>
+</html>
